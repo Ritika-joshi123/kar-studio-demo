@@ -1,15 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { BrowserRouter } from 'react-router-dom';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthContextProvider, SnackBarProvider } from './Shared';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const googleAuthClientKey = process.env.REACT_APP_GOOGLE_OAUTH!;
+
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <GoogleOAuthProvider clientId={googleAuthClientKey}>
+        <AuthContextProvider>
+          <SnackBarProvider>
+            <App />
+          </SnackBarProvider>
+        </AuthContextProvider>
+      </GoogleOAuthProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

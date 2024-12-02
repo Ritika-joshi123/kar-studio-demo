@@ -1,25 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ToastContainer } from 'react-toastify';
+
+import { Layout } from './Components';
+import { OverlayLoader, useAuthentication } from './Shared';
+import { AppRoute, routes } from './Routes';
+import { ReactNode, Suspense, useCallback } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 function App() {
+  const { isAuthenticated } = useAuthentication();
+
+  const renderRouteComponent = useCallback(
+    (route: AppRoute): ReactNode => {
+      if (isAuthenticated && route.skipIfAuthenticated) {
+        return <Navigate to="/" />;
+      }
+
+      if (!isAuthenticated && route.isPrivate) {
+        return <Navigate to="/login" />;
+      }
+
+      if (route.isLazyRoute && route.LazyComponent) {
+        return <route.LazyComponent />;
+      }
+
+      return route.Component;
+    },
+    [isAuthenticated]
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <Suspense fallback={<OverlayLoader />}>
+        <ToastContainer />
+        <Routes>
+          {routes.map((route) => (
+            <Route
+              key={route.key}
+              path={route.path}
+              element={renderRouteComponent(route)}
+            />
+          ))}
+        </Routes>
+      </Suspense>
+    </Layout>
   );
 }
 
