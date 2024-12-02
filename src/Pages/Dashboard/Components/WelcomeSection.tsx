@@ -13,7 +13,7 @@ type SliderImage = {
 };
 
 const sliderImages: SliderImage[] = [
-  { beforeImgUrl: 'images/Newcar.png', afterImgUrl: 'images/NewEditedcar.png' },
+  { beforeImgUrl: 'images/Newcar.png', afterImgUrl: 'images/karstudioImg.jpg' },
   { beforeImgUrl: 'images/before1.svg', afterImgUrl: 'images/after1.svg' },
   { beforeImgUrl: 'images/before2.svg', afterImgUrl: 'images/after2.svg' },
   { beforeImgUrl: 'images/before3.svg', afterImgUrl: 'images/after3.svg' },
